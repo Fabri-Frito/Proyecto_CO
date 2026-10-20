@@ -72,13 +72,22 @@ class Homeview extends StatelessWidget {
           ),
         ),
 
-        body: const TabBarView(
-          children: [
-            Center(child: Text("Sensores")),
-            Center(child: Text("Válvulas")),
-          ],
-        ),
+        body: const TabBarView(children: [_sensor(context), _valvulas(context)]),
       ),
     );
   }
+}
+
+Widget _sensor(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+    child: ListView(children: [Text("Sensores")]),
+  );
+}
+
+Widget _valvulas(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+    child: ListView(children: [Text("Valvulas")]),
+  );
 }
