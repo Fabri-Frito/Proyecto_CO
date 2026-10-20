@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:proyecto_co/pages/views/dispositivos.dart';
 
 class Homeview extends StatelessWidget {
   const Homeview({super.key});
@@ -72,22 +73,26 @@ class Homeview extends StatelessWidget {
           ),
         ),
 
-        body: const TabBarView(children: [_sensor(context), _valvulas(context)]),
+        body: TabBarView(
+          children: [
+            DispositivosTab(
+              tipo: 'detectores',
+              etiqueta: 'Detector',
+              color: const Color(0xFFC61A2B),
+              textoEstado: (data) => (data['estado'] ?? 'Desconocido').toString(),
+              detalle: (id, nombre) => DetalleDetector(id: id, nombre: nombre),
+            ),
+            DispositivosTab(
+              tipo: 'valvulas',
+              etiqueta: 'Válvula',
+              color: const Color(0xFF1A1A1A),
+              textoEstado: (data) => data['abierta'] == true ? 'Abierta' : 'Cerrada',
+              detalle: (id, nombre) => DetalleValvula(id: id, nombre: nombre),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-Widget _sensor(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-    child: ListView(children: [Text("Sensores")]),
-  );
-}
-
-Widget _valvulas(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-    child: ListView(children: [Text("Valvulas")]),
-  );
-}

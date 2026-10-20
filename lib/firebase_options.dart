@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1026213490464',
     projectId: 'proyecto-co-007',
     authDomain: 'proyecto-co-007.firebaseapp.com',
+    databaseURL: 'https://proyecto-co-007-default-rtdb.firebaseio.com/',
     storageBucket: 'proyecto-co-007.firebasestorage.app',
     measurementId: 'G-4014GPB3YK',
   );
