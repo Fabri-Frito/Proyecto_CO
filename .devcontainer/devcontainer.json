@@ -1,9 +1,6 @@
 {
   "name": "Flutter",
-  "image": "://microsoft.com",
-  "features": {
-    "ghcr.io/devcontainers/features/flutter:1": {}
-  },
+  "image": "ghcr.io/cirruslabs/flutter:stable",
   "forwardPorts": [],
   "portsAttributes": {
     "3000": {
