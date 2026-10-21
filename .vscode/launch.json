@@ -4,6 +4,14 @@
     // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
+        {
+            "name": "proyecto_co (MEmu)",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "127.0.0.1:21503"
+        },
+
         {
             "type": "chrome",
             "request": "launch",
