@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart'
 /// );
 /// ```
 class DefaultFirebaseOptions {
+  // Clase que contiene las opciones de configuración de Firebase para cada plataforma
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       return web;
@@ -29,17 +30,19 @@ class DefaultFirebaseOptions {
       case TargetPlatform.windows:
         return windows;
       case TargetPlatform.linux:
+        // Error que indica que la plataforma Linux no es compatible con las opciones de configuración de Firebase
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
-      default:
+      default: // Error que indica que la plataforma no es compatible con las opciones de configuración de Firebase
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
         );
     }
   }
 
+  // Configuración de Firebase para la plataforma web
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBEM5s1zYcXBKmuw3zR1wx7Ukb5YV44BZI',
     appId: '1:1026213490464:web:e5217c9ed40dee34533145',
@@ -51,6 +54,7 @@ class DefaultFirebaseOptions {
     measurementId: 'G-4014GPB3YK',
   );
 
+  // Configuración de Firebase para la plataforma Android
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBAkaR_l68WckLVAVdCfXHGX9mWmvWiQDY',
     appId: '1:1026213490464:android:c71ac14918e16ec6533145',
@@ -59,6 +63,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'proyecto-co-007.firebasestorage.app',
   );
 
+  // Configuración de Firebase para la plataforma iOS
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCajrmmsvcjpfsEYkq41tc_e6Z-uAuuBoo',
     appId: '1:1026213490464:ios:cc267818a38afaa6533145',
@@ -68,6 +73,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.proyectoCo',
   );
 
+  // Configuración de Firebase para la plataforma macOS
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyCajrmmsvcjpfsEYkq41tc_e6Z-uAuuBoo',
     appId: '1:1026213490464:ios:cc267818a38afaa6533145',
@@ -77,6 +83,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.example.proyectoCo',
   );
 
+  // Configuración de Firebase para la plataforma Windows
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyBEM5s1zYcXBKmuw3zR1wx7Ukb5YV44BZI',
     appId: '1:1026213490464:web:e766ad06588e4935533145',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthScreen extends StatefulWidget {
+  // inicializador del codigo de autenticacion
   const AuthScreen({super.key});
 
   @override
@@ -113,6 +114,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  // fución para mostrar un mensaje de error en caso de poner un dato incorrecto
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -129,6 +131,7 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
+  // Limpiar los controladores cuando el widget se elimine del árbol de widgets
   @override
   void dispose() {
     _signUpNameController.dispose();
@@ -140,20 +143,29 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  bool pasvisible = true;
+  bool pasvisible =
+      true; // Variable para controlar la visibilidad de la contraseña
 
-  @override
+  @override // Inicializa el estado del widget y establece la visibilidad de la contraseña
   void initState() {
     super.initState();
     pasvisible = false;
   }
 
+  /*|----------------------------------------------------------|
+  |                                                          |
+  |     Widget para construir la pantalla inicial de         |
+  |     autenticación con pestañas de Sign Up y Sign In      |
+  |                                                          |
+  |----------------------------------------------------------|*/
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      // Controlador de pestañas para alternar entre Sign Up y Sign In
       length: 2,
       initialIndex: 0, // Inicia en la pestaña de Sign Up
       child: Scaffold(
+        // Estructura principal de la pantalla de autenticación
         appBar: AppBar(
           toolbarHeight: 140,
           backgroundColor: const Color(0xFFC61A2B),
@@ -162,6 +174,7 @@ class _AuthScreenState extends State<AuthScreen> {
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(40.0)),
           ),
           title: Row(
+            // titulo e icono de la app
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
@@ -182,6 +195,8 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
           centerTitle: true,
           bottom: const TabBar(
+            // Pestañas para alternar entre Sign Up y Sign In
+            dividerColor: Colors.transparent,
             indicatorColor: Colors.white,
             indicatorWeight: 4,
             labelColor: Colors.white,
@@ -202,7 +217,11 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  // Formulario Registro
+  /*|--------------------------------------------------------|
+  |                                                        |
+  |     Widget para el formulario de creaciom de cuenta    |
+  |                                                        |
+  |--------------------------------------------------------|*/
   Widget _buildSignUpForm() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -231,6 +250,7 @@ class _AuthScreenState extends State<AuthScreen> {
             hintText: 'Contraseña',
             controller: _signUpPasswordController,
             obscureText: !pasvisible,
+            minlength: 6,
             helperText: "Caracteres en minuscula y numericos",
           ),
           const SizedBox(height: 35),
@@ -240,7 +260,11 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  // Formulario Login
+  /*|--------------------------------------------------------|
+  |                                                        |
+  |     Widget para el formulario de inicio de sesion      |
+  |                                                        |
+  |--------------------------------------------------------|*/
   Widget _buildSignInForm() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -271,11 +295,17 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
+  /*|-----------------------------------------|
+  |                                         |
+  |  Widget para crear un campo de texto    |
+  |                                         |
+  |-----------------------------------------|*/
   Widget _buildTextField({
     required String hintText,
     required TextEditingController controller,
     bool obscureText = false,
     int? maxlengt,
+    int? minlength,
     String? helperText,
   }) {
     return TextField(
@@ -321,6 +351,11 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
+  /*|-----------------------------------------|
+  |                                         |
+  | Widget para crear un botón de acción    |
+  |                                         |
+  |-----------------------------------------|*/
   Widget _buildActionButton({
     required String text,
     required VoidCallback onPressed,

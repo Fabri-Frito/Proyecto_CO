@@ -5,6 +5,11 @@ import 'package:proyecto_co/pages/custom/settings_controller.dart';
 class Settingview extends StatelessWidget {
   const Settingview({super.key});
 
+  /*|--------------------------------------------|
+    |                                            |
+    |  Funcion para mostrar la configuracion     |
+    |                                            |
+    |--------------------------------------------|*/
   @override
   Widget build(BuildContext context) {
     // Obtenemos los datos del usuario actual de Firebase
@@ -60,6 +65,11 @@ class Settingview extends StatelessWidget {
     );
   }
 
+  /*    |----------------------------------------------------------|
+        |                                                          |
+        |   Funcion para mostrar las opciones de configuracion     |
+        |                                                          |
+        |----------------------------------------------------------|*/
   Widget _settings(BuildContext context) {
     final s = SettingsController.instance;
 
@@ -119,6 +129,11 @@ class Settingview extends StatelessWidget {
     );
   }
 
+  /*      |--------------------------------------------|
+          |                                            |
+          |  Funcion para cambiar nombre de usuario    |
+          |                                            |
+          |--------------------------------------------|*/
   Future<void> _changeName(BuildContext context) async {
     final user = FirebaseAuth.instance.currentUser;
     final controller = TextEditingController(text: user?.displayName);
@@ -147,6 +162,11 @@ class Settingview extends StatelessWidget {
     }
   }
 
+  /*       |------------------------------------------|
+           |                                          |
+           |      Funcion para cambiar contraseña     |
+           |                                          |
+           |------------------------------------------|*/
   Future<void> _changePassword(BuildContext context) async {
     final currentController = TextEditingController();
     final newController = TextEditingController();
@@ -155,6 +175,7 @@ class Settingview extends StatelessWidget {
     bool loading = false;
 
     final success = await showDialog<bool>(
+      // crea una pantalla de dialogo para cambiar la contraseña, con validaciones y manejo de errores
       context: context,
       barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
@@ -193,7 +214,9 @@ class Settingview extends StatelessWidget {
               onPressed: loading ? null : () => Navigator.pop(ctx, false),
               child: const Text('Cancelar'),
             ),
+
             TextButton(
+              // Boton para guardar la nueva contraseña, con validaciones y manejo de errores
               onPressed: loading
                   ? null
                   : () async {
@@ -223,11 +246,37 @@ class Settingview extends StatelessWidget {
                         return;
                       }
 
+                      if (current == nueva) {
+                        setDialogState(
+                          () => errorText =
+                              'La nueva contraseña no puede ser igual a la actual.',
+                        );
+                        return;
+                      }
+
+                      if (!nueva.contains(RegExp(r'\d'))) {
+                        setDialogState(
+                          () => errorText =
+                              'La nueva contraseña debe contener al menos un número.',
+                        );
+                        return;
+                      }
+
+                      if (!nueva.contains(RegExp(r'^[a-z0-9!@#\$&*~\-_.]+$'))) {
+                        setDialogState(
+                          () => errorText =
+                              'La nueva contraseña debe estar completamente en minúsculas.',
+                        );
+                        return;
+                      }
+
                       setDialogState(() {
+                        // Inicia el proceso de cambio de contraseña
                         loading = true;
                         errorText = null;
                       });
 
+                      // Reautentica al usuario y actualiza la contraseña en Firebase
                       try {
                         final user = FirebaseAuth.instance.currentUser!;
                         final credential = EmailAuthProvider.credential(
@@ -238,6 +287,7 @@ class Settingview extends StatelessWidget {
                         await user.updatePassword(nueva);
                         if (ctx.mounted) Navigator.pop(ctx, true);
                       } on FirebaseAuthException catch (e) {
+                        // Manejo de errores específicos de Firebase
                         String msg = 'Ocurrió un error. Inténtalo de nuevo.';
                         switch (e.code) {
                           case 'wrong-password':
@@ -255,6 +305,7 @@ class Settingview extends StatelessWidget {
                             break;
                         }
                         setDialogState(() {
+                          // Actualiza el estado del diálogo para mostrar el error
                           loading = false;
                           errorText = msg;
                         });
@@ -274,6 +325,7 @@ class Settingview extends StatelessWidget {
     );
 
     if (success == true && context.mounted) {
+      // Muestra un mensaje de éxito si la contraseña se actualizó correctamente
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Contraseña actualizada correctamente.')),
       );

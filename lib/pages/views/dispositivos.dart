@@ -24,6 +24,11 @@ class DispositivosTab extends StatelessWidget {
     return FirebaseDatabase.instance.ref('usuarios/$uid/$tipo');
   }
 
+  /*|-----------------------------------------------|
+  |                                               |
+  |  Widget para mostrar la lista de dispositivos |
+  |                                               |
+  |-----------------------------------------------|*/
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,15 +38,35 @@ class DispositivosTab extends StatelessWidget {
           tipo == 'detectores' ? 'Sensores' : 'Válvulas',
           style: const TextStyle(fontSize: 22),
         ),
-        TextButton.icon(
-          onPressed: () => _agregar(context),
-          icon: const Icon(Icons.add_circle_outline),
-          label: const Text('Agregar'),
+
+        Column(
+          //Boton para agregar un nuevo dispositivo
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16), // Espacio superior
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: ElevatedButton(
+                  onPressed: () => _agregar(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFC61A2B),
+                    fixedSize: const Size(40, 40), // Tamaño fijo del botón
+                    shape: const CircleBorder(), // Mantiene tu diseño circular
+                  ),
+                  child: const Icon(Icons.add, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
         ),
         Expanded(
           child: StreamBuilder<DatabaseEvent>(
+            // Escucha los cambios en la lista de dispositivos del usuario
             stream: _lista.onValue,
             builder: (context, snapshot) {
+              // Muestra un indicador de carga mientras se obtienen los datos y se realiza una validadión de errores
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
@@ -56,6 +81,7 @@ class DispositivosTab extends StatelessWidget {
               }
               final items = value.entries.toList();
               return ListView.builder(
+                // Muestra la lista de dispositivos en tarjetas
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 itemCount: items.length,
                 itemBuilder: (context, i) {
@@ -79,6 +105,12 @@ class DispositivosTab extends StatelessWidget {
     );
   }
 
+  /*|--------------------------------------------|
+  |                                            |
+  |  Funcion para agregar un nuevo dispositivo |
+  |                                            |
+  |--------------------------------------------|
+*/
   Future<void> _agregar(BuildContext context) async {
     final idController = TextEditingController();
     final nombreController = TextEditingController();
@@ -86,9 +118,11 @@ class DispositivosTab extends StatelessWidget {
     bool cargando = false;
 
     await showDialog(
+      //para pedir el id y nombre del dispositivo
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
+          // Diálogo para agregar un nuevo dispositivo
           title: Text('Agregar ${etiqueta.toLowerCase()}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -111,14 +145,17 @@ class DispositivosTab extends StatelessWidget {
             ],
           ),
           actions: [
+            // Botones de cancelar y conectar
             TextButton(
               onPressed: cargando ? null : () => Navigator.pop(ctx),
               child: const Text('Cancelar'),
             ),
-            TextButton(
+            ElevatedButton(
+              // Botón para conectar el dispositivo
               onPressed: cargando
                   ? null
                   : () async {
+                      // Validación y conexión del dispositivo
                       final id = idController.text.trim();
                       final nombre = nombreController.text.trim();
 
@@ -146,8 +183,12 @@ class DispositivosTab extends StatelessWidget {
                         await _lista
                             .child(id)
                             .set(nombre.isEmpty ? '$etiqueta $id' : nombre);
-                        if (ctx.mounted) Navigator.pop(ctx);
+                        if (ctx.mounted)
+                          Navigator.pop(
+                            ctx,
+                          ); // Cierra el diálogo si la conexión fue exitosa
                       } catch (e) {
+                        // Manejo de errores de conexión
                         setDialogState(() {
                           cargando = false;
                           error = 'No se pudo conectar. Revisa tu conexión.';
@@ -169,6 +210,12 @@ class DispositivosTab extends StatelessWidget {
   }
 }
 
+/*|--------------------------------------------|
+  |                                            |
+  |  Widget para mostrar cada tarjeta de       |
+  |  dispositivo en la lista                   |
+  |                                            |
+  |--------------------------------------------|*/
 class _Tarjeta extends StatelessWidget {
   final String tipo, etiqueta, id, nombre;
   final Color color;
@@ -185,6 +232,12 @@ class _Tarjeta extends StatelessWidget {
     required this.detalle,
   });
 
+  /*|--------------------------------------------|
+    |                                            |
+           
+    |                                            |
+    |--------------------------------------------|                                            
+  */
   @override
   Widget build(BuildContext context) {
     final ref = FirebaseDatabase.instance.ref('$tipo/$id');
@@ -230,15 +283,26 @@ class _Tarjeta extends StatelessWidget {
   }
 }
 
-// ---------- Pantallas de detalle (al tocar la flecha) ----------
-
+/*|----------------------------------------------------|
+  |                                                    |
+  |  Pantalla para mostrar el estado del detector y    |
+  |            la cocentracion de gas                  |
+  |                                                    |
+  |----------------------------------------------------|
+*/
 class DetalleDetector extends StatelessWidget {
   final String id, nombre;
-  const DetalleDetector({super.key, required this.id, required this.nombre});
+  const DetalleDetector({
+    super.key,
+    required this.id,
+    required this.nombre,
+  }); // Constructor para recibir el ID y nombre del detector
 
   @override
   Widget build(BuildContext context) {
-    final ref = FirebaseDatabase.instance.ref('detectores/$id');
+    final ref = FirebaseDatabase.instance.ref(
+      'detectores/$id',
+    ); // Referencia a los datos del detector
 
     return Scaffold(
       appBar: AppBar(
@@ -249,15 +313,19 @@ class DetalleDetector extends StatelessWidget {
       body: StreamBuilder<DatabaseEvent>(
         stream: ref.onValue,
         builder: (context, snapshot) {
+          // Muestra un indicador de carga mientras se obtienen los datos
           final data = snapshot.data?.snapshot.value;
           if (data is! Map) {
+            // Si los datos no son un mapa, muestra un indicador de carga
             return const Center(child: CircularProgressIndicator());
           }
+
           final gas = data['gas'] ?? 0;
           final estado = (data['estado'] ?? 'Desconocido').toString();
 
           Color c;
           switch (estado.toLowerCase()) {
+            // Cambia el color según el estado del detector
             case 'limpio':
               c = Colors.green;
               break;
@@ -295,13 +363,25 @@ class DetalleDetector extends StatelessWidget {
   }
 }
 
+/*|----------------------------------------------------|
+  |                                                    |
+  |  Pantalla para poder abrir o cerrar la valvula     |
+  |                                                    |
+  |----------------------------------------------------|
+*/
 class DetalleValvula extends StatelessWidget {
   final String id, nombre;
-  const DetalleValvula({super.key, required this.id, required this.nombre});
+  const DetalleValvula({
+    super.key,
+    required this.id,
+    required this.nombre,
+  }); // Constructor para recibir el ID y nombre de la válvula
 
   @override
   Widget build(BuildContext context) {
-    final ref = FirebaseDatabase.instance.ref('valvulas/$id/abierta');
+    final ref = FirebaseDatabase.instance.ref(
+      'valvulas/$id/abierta',
+    ); // Referencia al estado de la válvula
 
     return Scaffold(
       appBar: AppBar(
@@ -310,31 +390,77 @@ class DetalleValvula extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: StreamBuilder<DatabaseEvent>(
+        // Escucha los cambios en el estado de la válvula
         stream: ref.onValue,
         builder: (context, snapshot) {
+          // Muestra un indicador de carga mientras se obtienen los datos
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-          final abierta = snapshot.data!.snapshot.value == true;
+          final abierta =
+              snapshot.data!.snapshot.value ==
+              true; // Determina si la válvula está abierta o cerrada
 
           return Padding(
-            padding: const EdgeInsets.all(24),
-            child: Card(
-              child: SwitchListTile(
-                secondary: Icon(
-                  abierta ? Icons.lock_open : Icons.lock,
-                  color: abierta ? Colors.green : Colors.red,
-                  size: 40,
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  abierta ? 'Válvula abierta' : 'Válvula cerrada',
+                  style: const TextStyle(fontSize: 22),
                 ),
-                title: Text(abierta ? 'Válvula abierta' : 'Válvula cerrada'),
-                subtitle: Text('ID: $id'),
-                value: abierta,
-                onChanged: (value) => ref.set(value),
-              ),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      // Muestra un diálogo de confirmación antes de cambiar el estado
+                      final result = await showBasicDialog(context);
+                      if (result == true) {
+                        await ref.set(!abierta);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: abierta ? Colors.green : Colors.red,
+
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(50),
+                    ),
+                    child: Icon(
+                      abierta ? Icons.lock_open : Icons.lock,
+                      color: Colors.white,
+                      size: 60,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text("ID: $id", style: const TextStyle(fontSize: 11)),
+              ],
             ),
           );
         },
       ),
     );
   }
+}
+
+Future<bool?> showBasicDialog(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Confirmación'),
+      content: const Text('¿Estás seguro de cambiar el estado de la válvula?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Confirmar'),
+        ),
+      ],
+    ),
+  );
 }

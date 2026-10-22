@@ -61,6 +61,7 @@ class Homeview extends StatelessWidget {
             ],
           ),
           bottom: const TabBar(
+            dividerColor: Colors.transparent,
             indicatorColor: Colors.white,
             indicatorWeight: 5,
             labelColor: Colors.white,
@@ -79,14 +80,16 @@ class Homeview extends StatelessWidget {
               tipo: 'detectores',
               etiqueta: 'Detector',
               color: const Color(0xFFC61A2B),
-              textoEstado: (data) => (data['estado'] ?? 'Desconocido').toString(),
+              textoEstado: (data) =>
+                  (data['estado'] ?? 'Desconocido').toString(),
               detalle: (id, nombre) => DetalleDetector(id: id, nombre: nombre),
             ),
             DispositivosTab(
               tipo: 'valvulas',
               etiqueta: 'Válvula',
               color: const Color(0xFF1A1A1A),
-              textoEstado: (data) => data['abierta'] == true ? 'Abierta' : 'Cerrada',
+              textoEstado: (data) =>
+                  data['abierta'] == true ? 'Abierta' : 'Cerrada',
               detalle: (id, nombre) => DetalleValvula(id: id, nombre: nombre),
             ),
           ],
@@ -95,4 +98,3 @@ class Homeview extends StatelessWidget {
     );
   }
 }
-
