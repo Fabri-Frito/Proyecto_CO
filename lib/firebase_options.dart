@@ -14,6 +14,12 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
+
+/*
+  Esta clase contiene las opciones de configuración de Firebase para cada plataforma (web, Android, iOS, macOS y Windows).
+  Se utiliza para inicializar Firebase en la aplicación Flutter.
+  Cada plataforma tiene su propia configuración específica, como apiKey, appId, messagingSenderId, projectId, etc.
+*/
 class DefaultFirebaseOptions {
   // Clase que contiene las opciones de configuración de Firebase para cada plataforma
   static FirebaseOptions get currentPlatform {
@@ -21,6 +27,7 @@ class DefaultFirebaseOptions {
       return web;
     }
     switch (defaultTargetPlatform) {
+      // Determina la plataforma actual y devuelve las opciones de configuración correspondientes
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:

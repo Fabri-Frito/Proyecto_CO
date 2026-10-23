@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+/*  
+  Esta clase representa la vista de contacto de la aplicación, que contiene información sobre el proyecto, 
+  opciones de soporte y asistencia, y recomendaciones en caso de emergencia.
+  Muestra el nombre del usuario autenticado en la esquina superior derecha.
+*/
 class Contactview extends StatelessWidget {
   const Contactview({super.key});
 
@@ -117,14 +122,12 @@ class Contactview extends StatelessWidget {
               ),
             ),
 
-            const ListTile( // Reglas de seguridad a seguir
-              title: Text(
-                '''Seguridad:''',
-                style: TextStyle(fontSize: 18),
-              ),
+            const ListTile(
+              // Reglas de seguridad a seguir
+              title: Text('''Seguridad:''', style: TextStyle(fontSize: 18)),
             ),
 
-            ListTile( 
+            ListTile(
               leading: const Icon(Icons.security, color: Colors.blue),
               subtitle: const Text('''-Ventila el lugar.
 -No generes chispas.
@@ -132,33 +135,40 @@ class Contactview extends StatelessWidget {
 -Evacúa si la fuga es muy extensa.'''),
             ),
 
-            const ListTile( // Llamadas de emergencia
-              title: Text(
-                '''Llamadas:''',
-                style: TextStyle(fontSize: 18),
-              ),
+            const ListTile(
+              // Llamadas de emergencia
+              title: Text('''Llamadas:''', style: TextStyle(fontSize: 18)),
             ),
 
-            ListTile( // Opción: Los bomberos
-              leading: const Icon(Icons.local_fire_department, color: Colors.blue),
+            ListTile(
+              // Opción: Los bomberos
+              leading: const Icon(
+                Icons.local_fire_department,
+                color: Colors.blue,
+              ),
               title: const Text('Bomberos:'),
               subtitle: const Text('Marca al 100'),
             ),
 
-            ListTile( // Opción: La defensa civil
+            ListTile(
+              // Opción: La defensa civil
               leading: const Icon(Icons.shield, color: Colors.blue),
               title: const Text('Defensa Civil:'),
               subtitle: const Text('Marca al 103'),
             ),
 
-            ListTile( // Opción: MetroGAS
+            ListTile(
+              // Opción: MetroGAS
               leading: const Icon(Icons.phone, color: Colors.blue),
-              title: const Text('MetroGAS (CABA y gran parte del GBA Sur/Oeste)::'),
+              title: const Text(
+                'MetroGAS (CABA y gran parte del GBA Sur/Oeste)::',
+              ),
               subtitle: const Text(' 0800-999-1050'),
               onTap: () {},
             ),
 
-            ListTile( // Opción: Naturgy BAN
+            ListTile(
+              // Opción: Naturgy BAN
               leading: const Icon(Icons.phone, color: Colors.blue),
               title: const Text('Naturgy BAN (Zona Norte y Oeste del GBA):'),
               subtitle: const Text('0800-888-1137 o 4754-1137'),

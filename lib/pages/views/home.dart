@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proyecto_co/pages/views/dispositivos.dart';
 
+/*  
+  Esta clase representa la vista principal de la aplicación, que contiene una barra de navegación con 
+  pestañas para mostrar los dispositivos (sensores y válvulas) y un botón para cerrar sesión.
+  Muestra el nombre del usuario autenticado en la esquina superior derecha.
+*/
 class Homeview extends StatelessWidget {
   const Homeview({super.key});
 
@@ -15,6 +20,7 @@ class Homeview extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        // Estructura principal de la vista con barra de navegación y contenido
         appBar: AppBar(
           toolbarHeight: 100,
           backgroundColor: const Color(0xFFC61A2B),
@@ -22,6 +28,7 @@ class Homeview extends StatelessWidget {
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(50.0)),
           ),
           title: Row(
+            // Contenedor para el icono, el título y el botón de cerrar sesión
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
@@ -61,6 +68,7 @@ class Homeview extends StatelessWidget {
             ],
           ),
           bottom: const TabBar(
+            // Barra de navegación con pestañas para cambiar entre sensores y válvulas
             dividerColor: Colors.transparent,
             indicatorColor: Colors.white,
             indicatorWeight: 5,

@@ -10,6 +10,11 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+/*  
+  Esta clase representa la pantalla principal de la aplicación, que contiene una barra de navegación inferior 
+  con pestañas para mostrar la vista de inicio, configuración y contacto.
+  Utiliza un IndexedStack para mantener el estado de cada vista mientras se navega entre ellas.
+*/
 class _HomeState extends State<Home> {
   int selectedIndex = 0;
 
@@ -23,13 +28,16 @@ class _HomeState extends State<Home> {
     ];
 
     return DefaultTabController(
+      // Controlador de pestañas para manejar la navegación entre las vistas
       length: 2,
       child: Scaffold(
         body: IndexedStack(index: selectedIndex, children: screens),
 
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
+          currentIndex:
+              selectedIndex, // Mantiene la pestaña seleccionada en la barra de navegación
           onTap: (newIndex) {
+            // Actualiza el índice seleccionado y reconstruye la interfaz
             setState(() {
               selectedIndex = newIndex;
             });
@@ -40,14 +48,17 @@ class _HomeState extends State<Home> {
           unselectedItemColor: Colors.white,
           items: [
             BottomNavigationBarItem(
+              // inicio
               icon: const Icon(Icons.home),
               label: "Inicio",
             ),
             BottomNavigationBarItem(
+              // configuracion
               icon: const Icon(Icons.settings),
               label: "Configuracion",
             ),
             BottomNavigationBarItem(
+              // ayuda
               icon: const Icon(Icons.help_outline),
               label: "Contacto y ayuda",
             ),
