@@ -15,6 +15,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    // Definimos las pantallas que se mostrarán en el IndexedStack
     final screens = [
       const Homeview(),
       const Settingview(),
