@@ -28,10 +28,10 @@ class Contactview extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.email, color: Colors.white, size: 50),
+              const Icon(Icons.info, color: Colors.white, size: 50),
               const SizedBox(width: 8),
               const Text(
-                "Contacto",
+                "Contacto y Ayuda",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,

@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
             ),
             BottomNavigationBarItem(
               // ayuda
-              icon: const Icon(Icons.help_outline),
+              icon: const Icon(Icons.info),
               label: "Contacto y ayuda",
             ),
           ],
